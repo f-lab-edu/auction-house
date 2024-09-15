@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: test_user
+    password: test1234

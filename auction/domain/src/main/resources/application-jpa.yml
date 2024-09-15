@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        highlight_sql: true
+        use_sql_comment: true
+  logging:
+    level:
+      org:
+        hibernate:
+          SQL: DEBUG
+          type:
+            descriptor:
+              sql:
+                BasicBinder: TRACE

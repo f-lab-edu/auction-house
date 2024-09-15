@@ -1,7 +1,7 @@
 package com.api.presentation;
 
 
-import com.core.application.AuctionService;
+import com.application.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
