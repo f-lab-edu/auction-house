@@ -1,0 +1,87 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+
+allprojects {
+    java {
+        sourceCompatibility = '21'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+bootJar.enabled = false
+
+subprojects {
+    group = 'com'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '21'
+    apply plugin: 'java'
+    // build.gradle 에서 api() 를 사용하려면 java-library 플러그인을 적용해야합니다.
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    // spring boot dependency 플러그인을 적용하여 사용중인 부트 버전에서 자동으로 의존성을 가져옵니다.ㄴ
+    apply plugin: 'io.spring.dependency-management'
+//    java {
+//        toolchain {
+//            languageVersion = JavaLanguageVersion.of(21)
+//        }
+//    }
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        // spring-boot
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        // test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+project(':api') {
+    allprojects {
+        dependencies {
+            implementation project(':application')
+        }
+    }
+}
+
+project(':application') {
+    allprojects {
+        dependencies {
+            implementation project(':domain')
+            implementation project(':infra')
+        }
+    }
+}
+
+project(':infra') {
+    allprojects {
+        dependencies {
+            implementation project(':domain')
+        }
+    }
+}
+
+
