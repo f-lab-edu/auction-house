@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Entity
+@Entity(name = "users")
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
