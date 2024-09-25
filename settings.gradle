@@ -1,0 +1,6 @@
+rootProject.name = 'auction-house'
+
+include 'api-product'
+include 'api-auction'
+include 'domain'
+include 'infra'
