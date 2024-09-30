@@ -9,7 +9,8 @@ jar {
 dependencies {
 	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
+	// Kafka
+	implementation 'org.springframework.kafka:spring-kafka'
 	// postgresql
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23' // 추가
 	runtimeOnly 'org.postgresql:postgresql'
