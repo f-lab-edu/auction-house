@@ -20,14 +20,14 @@ import java.util.Map;
 public class ListenerConfiguration {
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, Alert> kafkaMessageListenerContainerFactory() {
+    ConcurrentKafkaListenerContainerFactory<String, Alert> alertListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Alert> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(messageConsumerFactory());
+        factory.setConsumerFactory(alertConsumerFactory());
         return factory;
     }
 
     @Bean
-    public ConsumerFactory<String, Alert> messageConsumerFactory() {
+    public ConsumerFactory<String, Alert> alertConsumerFactory() {
         Map<String, Object> configurations = new HashMap<>();
         configurations.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.KAFKA_BROKER);
         configurations.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstant.GROUP_ID);

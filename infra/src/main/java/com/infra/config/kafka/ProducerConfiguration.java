@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -19,15 +20,15 @@ import java.util.Map;
 @EnableTransactionManagement
 public class ProducerConfiguration {
     @Bean
-    public ProducerFactory<String, Alert> messageProducerFactory() {
+    public ProducerFactory<String, Alert> alertProducerFactory() {
         DefaultKafkaProducerFactory<String, Alert> factory = new DefaultKafkaProducerFactory<>(
-                messageProducerConfigurations());
+                alertProducerConfigurations());
         factory.setTransactionIdPrefix("tx-");
         return factory;
     }
 
     @Bean
-    public Map<String, Object> messageProducerConfigurations() {
+    public Map<String, Object> alertProducerConfigurations() {
         Map<String, Object> configurations = new HashMap<>();
         configurations.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 KafkaConstant.KAFKA_BROKER);
@@ -37,5 +38,11 @@ public class ProducerConfiguration {
                 JsonSerializer.class);
 
         return configurations;
+    }
+
+    @Bean
+    public KafkaTemplate<String, Alert> alertKafkaTemplate(
+    ) {
+        return new KafkaTemplate<>(alertProducerFactory());
     }
 }
