@@ -1,12 +1,5 @@
 spring:
-  config:
-    activate:
-      on-profile: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: test_user
     password: test1234
-  kafka:
-    topic: bee-chat
-    group-id: bee
-    broker: localhost:9092
