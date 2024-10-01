@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Alert implements Serializable {
 }

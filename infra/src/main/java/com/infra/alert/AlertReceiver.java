@@ -21,11 +21,11 @@ public class AlertReceiver {
             dltStrategy = DltStrategy.FAIL_ON_ERROR,
             listenerContainerFactory = "retryConcurrentFactory",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
-            kafkaTemplate = "entryKafkaTemplate")
+            kafkaTemplate = "alertKafkaTemplate")
     @KafkaListener(
             topics = "bee-chat2",
             groupId = KafkaConstant.GROUP_ID,
-            containerFactory = "kafkaEntryListenerContainerFactory"
+            containerFactory = "alertListenerContainerFactory"
     )
     public void listen(Alert alert) {
         log.debug("sending enty via kafka listener..");
