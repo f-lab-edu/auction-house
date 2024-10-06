@@ -1,6 +1,6 @@
 package com.infra.alert.kafka;
 
-import com.infra.alert.kafka.dto.AlertResponseMessage;
+import com.infra.alert.kafka.dto.AuctionAlertResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ public class TransactionKafkaProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendTransactionResultMessage(AlertResponseMessage message) {
+    public void sendTransactionResultMessage(AuctionAlertResponseMessage message) {
         kafkaTemplate.send(ALERT_TRANSACTION_RESULT_TOPIC, message);
     }
 }

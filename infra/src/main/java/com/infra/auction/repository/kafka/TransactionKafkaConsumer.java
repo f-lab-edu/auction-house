@@ -2,7 +2,7 @@ package com.infra.auction.repository.kafka;
 
 import com.domain.alert.AlertStatus;
 import com.domain.auction.AuctionHistory;
-import com.infra.alert.kafka.dto.AlertResponseMessage;
+import com.infra.alert.kafka.dto.AuctionAlertResponseMessage;
 import com.infra.auction.repository.AuctionHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,7 +18,7 @@ public class TransactionKafkaConsumer {
     private final AuctionHistoryRepository auctionHistoryRepository;
 
     @KafkaListener(topics = "alert-transaction-result", groupId = "alert-transaction-result-group")
-    public void consumeAlertTransactionResultEvent(AlertResponseMessage alertResponseMessage) {
+    public void consumeAlertTransactionResultEvent(AuctionAlertResponseMessage alertResponseMessage) {
         if(alertResponseMessage.alertStatus() == AlertStatus.FAILED) {
 
         }

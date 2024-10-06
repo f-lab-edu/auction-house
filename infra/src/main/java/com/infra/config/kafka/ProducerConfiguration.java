@@ -1,6 +1,6 @@
 package com.infra.config.kafka;
 
-import com.infra.alert.Alert;
+import com.infra.alert.kafka.message.AuctionAlertMessage;
 import com.infra.config.util.KafkaConstant;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +20,8 @@ import java.util.Map;
 @EnableTransactionManagement
 public class ProducerConfiguration {
     @Bean
-    public ProducerFactory<String, Alert> alertProducerFactory() {
-        DefaultKafkaProducerFactory<String, Alert> factory = new DefaultKafkaProducerFactory<>(
+    public ProducerFactory<String, AuctionAlertMessage> alertProducerFactory() {
+        DefaultKafkaProducerFactory<String, AuctionAlertMessage> factory = new DefaultKafkaProducerFactory<>(
                 alertProducerConfigurations());
         factory.setTransactionIdPrefix("tx-");
         return factory;
@@ -41,7 +41,7 @@ public class ProducerConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, Alert> alertKafkaTemplate(
+    public KafkaTemplate<String, AuctionAlertMessage> alertKafkaTemplate(
     ) {
         return new KafkaTemplate<>(alertProducerFactory());
     }

@@ -1,6 +1,6 @@
 package com.infra.config.kafka;
 
-import com.infra.alert.Alert;
+import com.infra.alert.kafka.message.AuctionAlertMessage;
 import com.infra.config.util.KafkaConstant;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,14 +20,14 @@ import java.util.Map;
 public class ListenerConfiguration {
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, Alert> alertListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Alert> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    ConcurrentKafkaListenerContainerFactory<String, AuctionAlertMessage> alertListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, AuctionAlertMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(alertConsumerFactory());
         return factory;
     }
 
     @Bean
-    public ConsumerFactory<String, Alert> alertConsumerFactory() {
+    public ConsumerFactory<String, AuctionAlertMessage> alertConsumerFactory() {
         Map<String, Object> configurations = new HashMap<>();
         configurations.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstant.KAFKA_BROKER);
         configurations.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstant.GROUP_ID);
@@ -42,7 +42,7 @@ public class ListenerConfiguration {
         configurations.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
 
         return new DefaultKafkaConsumerFactory<>(configurations, new StringDeserializer(),
-                new JsonDeserializer<>(Alert.class));
+                new JsonDeserializer<>(AuctionAlertMessage.class));
     }
 
 }
