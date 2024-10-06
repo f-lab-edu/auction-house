@@ -3,6 +3,7 @@ package com.apiauction.service;
 import com.apiauction.service.usecase.BidProductUsecase;
 import com.apiauction.service.validator.ProductValidator;
 import com.apiauction.service.validator.UserValidator;
+import com.domain.alert.AlertStatus;
 import com.domain.auction.AuctionHistory;
 import com.domain.product.Product;
 import com.infra.alert.kafka.message.AuctionAlertMessage;
@@ -28,7 +29,7 @@ public class AuctionService {
         Product product = productValidator.get(usecase.productId());
         productValidator.isAvailableToBid(product, usecase.bidAmount());
         userValidator.valid(usecase.bidderId());
-        AuctionHistory auctionHistory = auctionHistoryRepository.save(usecase.toEntity());
+        AuctionHistory auctionHistory = auctionHistoryRepository.save(usecase.toEntity(AlertStatus.IN_PROGRESS));
         alertSender.send(AuctionAlertMessage.createBidAlertMessage(auctionHistory.getId(), product.getSellerId()));
     }
 }
