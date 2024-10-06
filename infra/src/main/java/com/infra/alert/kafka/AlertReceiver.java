@@ -1,6 +1,10 @@
-package com.infra.alert;
+package com.infra.alert.kafka;
 
-import com.infra.config.util.KafkaConstant;
+import com.domain.alert.AlertStatus;
+import com.domain.alert.AuctionAlert;
+import com.infra.alert.kafka.dto.AuctionAlertResponseMessage;
+import com.infra.alert.kafka.message.AuctionAlertMessage;
+import com.infra.alert.repository.AuctionAlertRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,21 +21,39 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AlertReceiver {
+    public static final String KAFKA_TOPIC = "auction-topic";
+    public static final String KAFKA_GROUP_ID = "auctio-group-id";
+
+    private final AuctionAlertRepository alertRepository;
+    private final TransactionKafkaProducer transactionKafkaProducer;
+
     @RetryableTopic(
             dltStrategy = DltStrategy.FAIL_ON_ERROR,
             listenerContainerFactory = "retryConcurrentFactory",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
             kafkaTemplate = "alertKafkaTemplate")
     @KafkaListener(
-            topics = "bee-chat2",
-            groupId = KafkaConstant.GROUP_ID,
+            topics = KAFKA_TOPIC,
+            groupId = KAFKA_GROUP_ID,
             containerFactory = "alertListenerContainerFactory"
     )
-    public void listen(Alert alert) {
-        log.debug("sending enty via kafka listener..");
+    public void listen(AuctionAlertMessage alertMessage) {
+        Long auctionHistoryId = alertMessage.getAuctionHistoryId();
+        try {
+            AuctionAlert alert = alertMessage.toEntity();
+            alertRepository.save(alert);
+
+            AuctionAlertResponseMessage successMessage = new AuctionAlertResponseMessage(auctionHistoryId, AlertStatus.SUCCESS);
+            transactionKafkaProducer.sendTransactionResultMessage(successMessage);
+        } catch (Exception e) {
+            AuctionAlertResponseMessage failMessage = new AuctionAlertResponseMessage(auctionHistoryId, AlertStatus.FAILED);
+            transactionKafkaProducer.sendTransactionResultMessage(failMessage);
+        }
+
     }
 
     /**
+     * TODO
      * Dlt에 메세지 쌓일 때 실패 로그 쌓음
      */
     @DltHandler
