@@ -1,13 +1,11 @@
 package com.infra.alert;
 
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
+
+import com.infra.common.Message;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
-public class Alert implements Serializable {
+public class Alert implements Message {
 }
