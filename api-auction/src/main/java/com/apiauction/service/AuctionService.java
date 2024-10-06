@@ -27,7 +27,7 @@ public class AuctionService {
     public void bid(BidProductUsecase usecase) {
         Product product = productValidator.valid(usecase.productId());
         productValidator.isAvailableToBid(product, usecase.bidAmount());
-        userValidator.getUser(usecase.bidderId());
+        userValidator.validatetUser(usecase.bidderId());
         auctionHistoryRepository.save(usecase.toEntity());
         alertSender.send(KafkaConstant.KAFKA_TOPIC, new Alert());
     }
