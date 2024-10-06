@@ -13,7 +13,7 @@ public class UserValidator {
 
     private final UserRepository userRepository;
 
-    public void validatetUser(Long userId) {
+    public void valid(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id:" + userId));
     }
