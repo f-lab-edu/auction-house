@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductValidator {
     private final ProductRepository productRepository;
 
-    public Product valid(Long productId) {
+    public Product get(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id:" + productId));
     }

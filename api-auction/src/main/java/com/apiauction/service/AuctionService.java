@@ -3,7 +3,11 @@ package com.apiauction.service;
 import com.apiauction.service.usecase.BidProductUsecase;
 import com.apiauction.service.validator.ProductValidator;
 import com.apiauction.service.validator.UserValidator;
+import com.domain.alert.AlertStatus;
+import com.domain.auction.AuctionHistory;
 import com.domain.product.Product;
+import com.infra.alert.kafka.message.AuctionAlertMessage;
+import com.infra.alert.kafka.AlertSender;
 import com.infra.auction.repository.AuctionHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +22,14 @@ public class AuctionService {
     private final AuctionHistoryRepository auctionHistoryRepository;
     private final ProductValidator productValidator;
     private final UserValidator userValidator;
+    private final AlertSender alertSender;
 
     @Transactional
     public void bid(BidProductUsecase usecase) {
-        Product product = productValidator.valid(usecase.productId());
+        Product product = productValidator.get(usecase.productId());
         productValidator.isAvailableToBid(product, usecase.bidAmount());
-        userValidator.getUser(usecase.bidderId());
-        auctionHistoryRepository.save(usecase.toEntity());
+        userValidator.valid(usecase.bidderId());
+        AuctionHistory auctionHistory = auctionHistoryRepository.save(usecase.toEntity(AlertStatus.IN_PROGRESS));
+        alertSender.send(AuctionAlertMessage.createBidAlertMessage(auctionHistory.getId(), product.getSellerId()));
     }
 }
