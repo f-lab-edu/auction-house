@@ -25,4 +25,11 @@ public class AuctionHistory extends BaseEntity {
     @Enumerated
     private AlertStatus isAlertSend;
 
+    public void alertSendSuccess() {
+        this.isAlertSend = AlertStatus.SUCCESS;
+    }
+
+    public void alertSendFailed() {
+        this.isAlertSend = AlertStatus.FAILED;
+    }
 }
