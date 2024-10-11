@@ -45,7 +45,7 @@ public class AlertReceiver {
 
             AuctionAlertResponseMessage successMessage = new AuctionAlertResponseMessage(auctionHistoryId, AlertStatus.SUCCESS);
             transactionKafkaProducer.sendTransactionResultMessage(successMessage);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             AuctionAlertResponseMessage failMessage = new AuctionAlertResponseMessage(auctionHistoryId, AlertStatus.FAILED);
             transactionKafkaProducer.sendTransactionResultMessage(failMessage);
         }
