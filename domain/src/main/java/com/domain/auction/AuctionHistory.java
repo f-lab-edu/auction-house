@@ -22,6 +22,7 @@ public class AuctionHistory extends BaseEntity {
     @Column(nullable = false)
     private Long bidAmount;
 
+    @Column
     @Enumerated
     private AlertStatus isAlertSend;
 

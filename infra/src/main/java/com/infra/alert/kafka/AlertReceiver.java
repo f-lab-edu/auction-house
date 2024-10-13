@@ -16,6 +16,7 @@ import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -37,6 +38,7 @@ public class AlertReceiver {
             groupId = KAFKA_GROUP_ID,
             containerFactory = "alertListenerContainerFactory"
     )
+    @Transactional
     public void listen(AuctionAlertMessage alertMessage) {
         Long auctionHistoryId = alertMessage.getAuctionHistoryId();
         try {

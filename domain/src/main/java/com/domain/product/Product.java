@@ -29,8 +29,11 @@ public class Product extends BaseEntity {
     private Long sellerId;
 
     public void isAvailableToBid(Long bidAmount) {
-        if(this.minimumAmount > bidAmount || this.bidAmount > bidAmount) {
-            throw new RuntimeException();
+        if(this.minimumAmount >= bidAmount ) {
+            throw new RuntimeException("cannot bid cause bidAmount is less than minimumAmount");
+        }
+        if(this.bidAmount != null && this.bidAmount > bidAmount) {
+            throw new RuntimeException("cannot bid cause bidAmount is less than bidAmount");
         }
     }
 }
