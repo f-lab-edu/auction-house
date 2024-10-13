@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AlertReceiver {
     public static final String KAFKA_TOPIC = "auction-topic";
-    public static final String KAFKA_GROUP_ID = "auctio-group-id";
+    public static final String KAFKA_GROUP_ID = "auction-group-id";
 
     private final AuctionAlertRepository alertRepository;
     private final TransactionKafkaProducer transactionKafkaProducer;
@@ -47,7 +47,7 @@ public class AlertReceiver {
 
             AuctionAlertResponseMessage successMessage = new AuctionAlertResponseMessage(auctionHistoryId, AlertStatus.SUCCESS);
             transactionKafkaProducer.sendTransactionResultMessage(successMessage);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             AuctionAlertResponseMessage failMessage = new AuctionAlertResponseMessage(auctionHistoryId, AlertStatus.FAILED);
             transactionKafkaProducer.sendTransactionResultMessage(failMessage);
         }

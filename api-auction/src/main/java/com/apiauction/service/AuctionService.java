@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AuctionService {
 
     private final ProductRepository productRepository;
@@ -29,10 +28,11 @@ public class AuctionService {
 
     @Transactional
     public void bid(BidProductUsecase usecase) {
-        Product product = productRepository.findById(usecase.productId())
+        userValidator.valid(usecase.bidderId());
+        Product product = productRepository.findByIdForUpdate(usecase.productId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id:" + usecase.productId()));
         productValidator.isAvailableToBid(product, usecase.bidAmount());
-        userValidator.valid(usecase.bidderId());
+        product.updateBidAmount(usecase.bidAmount());
         AuctionHistory auctionHistory = auctionHistoryRepository.save(usecase.toEntity(AlertStatus.IN_PROGRESS));
         alertSender.send(AuctionAlertMessage.createBidAlertMessage(auctionHistory.getId(), product.getSellerId()));
     }
