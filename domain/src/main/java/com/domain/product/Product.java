@@ -32,8 +32,12 @@ public class Product extends BaseEntity {
         if(this.minimumAmount >= bidAmount ) {
             throw new RuntimeException("cannot bid cause bidAmount is less than minimumAmount");
         }
-        if(this.bidAmount != null && this.bidAmount > bidAmount) {
+        if(this.bidAmount != null && this.bidAmount >= bidAmount) {
             throw new RuntimeException("cannot bid cause bidAmount is less than bidAmount");
         }
+    }
+
+    public void updateBidAmount(Long bidAmount) {
+        this.bidAmount = bidAmount;
     }
 }
