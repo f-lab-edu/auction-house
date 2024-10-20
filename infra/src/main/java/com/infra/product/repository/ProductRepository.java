@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<Product> findByIdForUpdate(@Param("id") Long productId);
+    Optional<Product> findById(@Param("id") Long productId);
 
 }
