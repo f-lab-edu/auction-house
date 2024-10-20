@@ -10,6 +10,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
@@ -37,6 +38,7 @@ public class ListenerConfiguration {
         // consumer transaction 설정
         // default : true
         configurations.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        configurations.put(JsonDeserializer.TRUSTED_PACKAGES, "*"); // 이부분
         // read_committed: 커밋된 데이터만 읽는다.
         // default : read_uncommitted
         configurations.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");

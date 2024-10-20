@@ -4,6 +4,7 @@ import com.domain.alert.AlertStatus;
 import com.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
 
@@ -23,7 +24,7 @@ public class AuctionHistory extends BaseEntity {
     private Long bidAmount;
 
     @Column
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private AlertStatus isAlertSend;
 
     public void alertSendSuccess() {
