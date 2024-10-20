@@ -12,6 +12,7 @@ import com.infra.auction.repository.AuctionHistoryRepository;
 import com.infra.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +30,26 @@ public class AuctionService {
     @Transactional
     public void bid(BidProductUsecase usecase) {
         userValidator.valid(usecase.bidderId());
-        Product product = productRepository.findByIdForUpdate(usecase.productId())
+
+        Product product = productRepository.findById(usecase.productId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id:" + usecase.productId()));
         productValidator.isAvailableToBid(product, usecase.bidAmount());
+
         product.updateBidAmount(usecase.bidAmount());
+
+        /*
+        * Async 비동기로 처리하기, 핀포인터
+        * 대기열 추가
+        * queue(Redis)에서 consume 완료 해서 사용자에게 알려주기
+        * websocket
+        * */
         AuctionHistory auctionHistory = auctionHistoryRepository.save(usecase.toEntity(AlertStatus.IN_PROGRESS));
-        alertSender.send(AuctionAlertMessage.createBidAlertMessage(auctionHistory.getId(), product.getSellerId()));
+        sendAlert(AuctionAlertMessage.createBidAlertMessage(auctionHistory.getId(), product.getSellerId()));
+    }
+
+    @Async
+    public void sendAlert(AuctionAlertMessage message) {
+        alertSender.send(message);
+
     }
 }
